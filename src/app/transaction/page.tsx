@@ -261,8 +261,8 @@ export default function TransactionPage() {
                     <button
                       onClick={() => {
                         setShowScanner(true);
-                        setIsScannerActive(true); // 初回起動時にもカメラ起動
-                        setHasScannedOnce(true);  // 起動履歴を記録
+                        setIsScannerActive(true); 
+                        setHasScannedOnce(true);  
                       }}
                       className="px-4 py-2 bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
                     >
@@ -275,7 +275,11 @@ export default function TransactionPage() {
                   <div className="flex flex-col items-center justify-center w-full h-full text-white">
                     <p>バーコード: {code}</p>
                     <button
-                      onClick={() => setIsScannerActive(true)}
+                      onClick={() => {
+                        setCode(""); 
+                        setProduct(null);
+                        setIsScannerActive(true);
+                      }}
                       className="mt-2 px-4 py-2 bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
                     >
                       {hasScannedOnce ? "再スキャン" : "スキャナーを起動"}
