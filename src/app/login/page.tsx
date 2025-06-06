@@ -17,7 +17,7 @@ export default function LoginPage() {
 
     try {
       // 従業員コードの検証
-      const response = await axios.get(`http://localhost:8000/employees/${employeeCode}`);
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/employees/${employeeCode}`);
       
       if (response.data) {
         // ログイン成功

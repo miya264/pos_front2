@@ -7,6 +7,9 @@ import BarcodeScanner from "../components/BarcodeScanner";
 import { TrashIcon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useEmployee } from "../contexts/EmployeeContext";
 
+// APIエンドポイントの設定
+const API_ENDPOINT = process.env.NEXT_PUBLIC_API_ENDPOINT;
+
 // 型定義
 interface Product {
   prd_id: number;
@@ -33,7 +36,8 @@ export default function TransactionPage() {
   const [showCart, setShowCart] = useState(false);
   const { employeeCode, isLoggedIn, setIsLoggedIn, setEmployeeCode } = useEmployee();
   const router = useRouter();
-
+  const [hasScannedOnce, setHasScannedOnce] = useState(false);
+  
   useEffect(() => {
     const path = window.location.pathname;
     console.log('トランザクションページ初期化:', {
@@ -52,13 +56,11 @@ export default function TransactionPage() {
   const handleSearch = async () => {
     try {
       if (!code) return;
-      console.log("検索開始:", code);
-      const response = await axios.get(`http://localhost:8000/products/code/${encodeURIComponent(code)}`);
-      console.log("検索結果:", response.data);
+      const requestUrl = `${API_ENDPOINT}/products/code/${encodeURIComponent(code)}`;
+      const response = await axios.get(requestUrl);
       setProduct(response.data);
       setError("");
     } catch (err) {
-      console.error("検索エラー:", err);
       setProduct(null);
       setError("商品が見つかりません");
     }
@@ -68,7 +70,8 @@ export default function TransactionPage() {
     setCode(detectedCode);
     setIsScannerActive(false);
     try {
-      const response = await axios.get(`http://localhost:8000/products/code/${encodeURIComponent(detectedCode)}`);
+      const requestUrl = `${API_ENDPOINT}/products/code/${encodeURIComponent(detectedCode)}`;
+      const response = await axios.get(requestUrl);
       setProduct(response.data);
       setError("");
     } catch (err) {
@@ -121,24 +124,7 @@ export default function TransactionPage() {
     setIsProcessing(true);
 
     try {
-      // 現在の状態をチェック
-      const currentEmployeeCode = localStorage.getItem('employeeCode');
-      const currentLoginStatus = localStorage.getItem('isLoggedIn');
-
-      console.log('取引開始時の状態チェック:', {
-        コンテキスト: {
-          isLoggedIn,
-          employeeCode,
-        },
-        ローカルストレージ: {
-          employeeCode: currentEmployeeCode,
-          isLoggedIn: currentLoginStatus
-        }
-      });
-
-      // 店員コードの設定
       const empCode = isLoggedIn && employeeCode ? employeeCode : 'GUEST00001';
-      console.log('使用する店員コード:', empCode);
 
       const transactionData = cartItems.map(item => ({
         prd_id: item.prd_id,
@@ -148,7 +134,6 @@ export default function TransactionPage() {
         quantity: Number(item.quantity)
       }));
 
-      // APIリクエストの設定
       const config = {
         headers: {
           'emp-cd': empCode,
@@ -159,43 +144,17 @@ export default function TransactionPage() {
         }
       };
 
-      console.log('APIリクエスト設定:', {
-        url: "http://localhost:8000/transactions/",
-        headers: config.headers,
-        データ: {
-          取引件数: transactionData.length,
-          合計金額: transactionData.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-        }
-      });
-
       const response = await axios.post(
-        "http://localhost:8000/transactions/",
+        `${API_ENDPOINT}/transactions/`,
         transactionData,
         config
       );
-
-      console.log('API応答:', {
-        ステータス: response.status,
-        データ: response.data,
-        ヘッダー: response.headers
-      });
 
       setShowCompletionPopup(true);
       setCompletedAmount(calculateTotal());
       setShowCart(false);
     } catch (err) {
-      console.error('取引処理エラー:', err);
-      if (axios.isAxiosError(err)) {
-        console.error('Axiosエラー詳細:', {
-          ステータス: err.response?.status,
-          データ: err.response?.data,
-          ヘッダー: err.response?.headers,
-          設定: err.config
-        });
-        setError(`取引エラー: ${err.response?.data?.detail || err.message}`);
-      } else {
-        setError("予期せぬエラーが発生しました。");
-      }
+      setError("取引処理中にエラーが発生しました。");
     } finally {
       setIsProcessing(false);
     }
@@ -297,28 +256,32 @@ export default function TransactionPage() {
                   バーコードスキャン
                 </h1>
                 <div className="flex flex-col items-center justify-center bg-gray-400 m-4 w-11/12 h-48 rounded-lg relative overflow-hidden">
-                  {!showScanner ? (
-                    <div className="flex flex-col items-center justify-center w-full h-full text-white">
-                      <button
-                        onClick={() => setShowScanner(true)}
-                        className="px-4 py-2 bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
-                      >
-                        スキャナーを起動
-                      </button>
-                    </div>
-                  ) : isScannerActive ? (
-                    <BarcodeScanner onDetected={handleBarcodeDetected} />
-                  ) : (
-                    <div className="flex flex-col items-center justify-center w-full h-full text-white">
-                      <p>バーコード: {code}</p>
-                      <button
-                        onClick={() => setIsScannerActive(true)}
-                        className="mt-2 px-4 py-2 bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
-                      >
-                        再スキャン
-                      </button>
-                    </div>
-                  )}
+                {!showScanner ? (
+                  <div className="flex flex-col items-center justify-center w-full h-full text-white">
+                    <button
+                      onClick={() => {
+                        setShowScanner(true);
+                        setIsScannerActive(true); // 初回起動時にもカメラ起動
+                        setHasScannedOnce(true);  // 起動履歴を記録
+                      }}
+                      className="px-4 py-2 bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+                    >
+                      スキャナーを起動
+                    </button>
+                  </div>
+                ) : isScannerActive ? (
+                  <BarcodeScanner onDetected={handleBarcodeDetected} />
+                ) : (
+                  <div className="flex flex-col items-center justify-center w-full h-full text-white">
+                    <p>バーコード: {code}</p>
+                    <button
+                      onClick={() => setIsScannerActive(true)}
+                      className="mt-2 px-4 py-2 bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+                    >
+                      {hasScannedOnce ? "再スキャン" : "スキャナーを起動"}
+                    </button>
+                  </div>
+                )}
                   <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
                     <div className="border-t-2 border-l-2 border-white w-8 h-8 absolute top-4 left-4"></div>
                     <div className="border-t-2 border-r-2 border-white w-8 h-8 absolute top-4 right-4"></div>
