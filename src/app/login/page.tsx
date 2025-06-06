@@ -17,37 +17,21 @@ export default function LoginPage() {
 
     try {
       // 従業員コードの検証
-      const response = await axios.get(`http://localhost:8000/employees/${employeeCode}`);
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/employees/${employeeCode}`);
       
       if (response.data) {
-        // ログイン成功
-        console.log('ログイン成功:', employeeCode);
-        console.log('従業員データ:', response.data);
-        
-        // 状態を更新する前に現在の状態をログ
-        console.log('現在の状態:', { 
-          currentEmployeeCode: employeeCode,
-          isCurrentlyLoggedIn: isLoggedIn 
-        });
-        
-        // 状態を更新
+        // ログイン成功時の処理
         setGlobalEmployeeCode(employeeCode);
         setIsLoggedIn(true);
         
         // 更新後の確認のため少し待機
         await new Promise(resolve => setTimeout(resolve, 100));
         
-        console.log('グローバル状態を設定:', { 
-          employeeCode,
-          isLoggedIn: true 
-        });
-        
         router.push('/transaction');
       } else {
         setError('無効な店員番号です');
       }
     } catch (err) {
-      console.error('ログインエラー:', err);
       setError('店員番号が見つかりません');
     }
   };

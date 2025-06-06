@@ -23,10 +23,12 @@ export default function BarcodeScanner({ onDetected }: BarcodeScannerProps) {
         
         // 検出時にビープ音を鳴らす
         try {
-          const beep = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTGH0fPTgjMGHm7A7+OZRA0PVqzn77BdGAg+ltryxnMpBSl+zPLaizsIGGS57OihUBELTKXh8bllHgU2jdXzzn0vBSF1xe/glEILElyx6OyrWBUIQ5zd8sFuJAUuhM/z1YU2Bhxqvu7mnEYODlOq5O+zYBoGPJPY88p2KwUme8rx3I4+CRZiturqpVITC0mi4PK8aB8GM4nU8tGAMQYfcsLu45ZFDBFYr+ftrVoXCECY3PLEcSYELIHO8diJOQgZaLvt559NEAxPqOPwtmMcBjiP1/PMeS0GI3fH8N2RQAoUXrTp66hVFApGnt/yvmwhBTCG0fPTgjQGHW/A7eSaRQ0PVqzl77BeGQc9ltvyxnUoBSh+zPDaizsIGGS56+mjTxELTKXh8bllHgU1jdT0z3wvBSJ1xe/glEILElyx6OyrWRUIRJve8sFuJAUug8/z1oU2Bhxqvu3mnEYODlOq5O+zYRsGPJPY88p3KgUme8rx3I4+CRVht+rqpVMSC0mh4PK8aiAFM4nU8tGAMQYfccPu45ZFDBFYr+ftrVwWCECY3PLEcSYELIDP8tiIOQgZZ7zs56BODwxPqOPxtmQcBjiP1/PMeS0GI3fH8N+RQAoUXrTp66hWEwlGnt/yv2wiBDCG0fPTgzQHHG3A7eSaSw0PVqzl77BeGQc9ltrzxnUoBSh9y/HajDsIF2W56+mjUREKTKPi8blnHgU1jdTy0HwvBSJ0xe/glUQKElux5+yrWRUJQ5vd88FwJAQug8/z1oY2Bhxqvu3mnUYODlKp5e+zYRsGOpPY88p3KgUmecnw3Y4/CBVhtuvqp1UTC0mf4PK9aiAFM4nU8tGBMQYfccLv45dGDRBYrufur1sYB0CX2/PEcicELH/P8tiKOggZZ7vt56BODwxPpuPxtmQdBTiP1/PMei4GI3bH8N+RQQkUXbPq66hWFQlGnt/yv2wiBDCG0PPThDUGHG3A7eSbTA0PVKvl77BeGQc9lNryynYpBSh9y/HajT0IF2S46+mjUREKTKPi8bpoHgU1jdTy0H4wBSJ0xe/glUQKElux5+yrWhYJQ5vd88NxJAQug8/z1oY3Bhtpve3mnkcPDlKp5e+0YhsGOpHY88p5LAUlecnw3Y8/CBVhtuvqplQTC0mh4PK9aiAFM4nU8tGBMQYfccLv45dGDRBYrufur10XB0CX2/PEcycELH7O8tiKOwgZZrvt56BOEQxPpuPxt2UdBTeP1/PMei4GI3bH79+RQQsUXbTo7KlXFQlGnN/yv24jBDCF0PPThDUGHG3A7eSbTA0PVKvl77BgGgc9lNryynYpBSh7y/HajT0IF2S46+mjUhEKTKLh8bpoHwU1jdTy0H4wBSF0xPDglkUKElux5+yrWhYJQ5rb88NyJQQug87z1oY3Bhtpve3mnkcPDlKp5e+0YhsGOpHY8sp5LAUleMnw3Y9ACBVhtuvqp1UTC0mf4PK9bCEFMojT89GBMgcfccLv45dGDRBYrufur10XB0CX2/PEcycELH7O8tiKOwgZZrvt56BOEQxPpuPxt2UdBTeO1/PMei8GI3bH79+RQQsUXbTo7KlXFQlGnN/yv24jBDCF0PPThDUGHG3A7eSbTA0PVKvl77BgGgc9lNryynYpBSh7y/HajT0IF2S46+mjUhEKTKLh8bpoHwU1");
+          const beep = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTGH0fPTgjMGHm7A7+OZRA0PVqzn77BdGAg+ltryxnMpBSl+zPLaizsIGGS57OihUBELTKXh8bllHgU2jdXzzn0vBSF1xe/glEILElyx6OyrWBUIQ5zd8sFuJAUuhM/z1YU2Bhxqvu7mnEYODlOq5O+zYBoGPJPY88p2KwUme8rx3I4+CRZiturqpVITC0mi4PK8aB8GM4nU8tGAMQYfcsLu45ZFDBFYr+ftrVoXCECY3PLEcSYELIHO8diJOQgZaLvt559NEAxPqOPwtmMcBjiP1/PMeS0GI3fH8N2RQAoUXrTp66hVFApGnt/yvmwhBTCG0fPTgjQGHW/A7eSaRQ0PVqzl77BeGQc9ltvyxnUoBSh+zPDaizsIGGS56+mjTxELTKXh8bllHgU1jdT0z3wvBSJ1xe/glEILElyx6OyrWRUIRJve8sFuJAUug8/z1oU2Bhxqvu3mnEYODlOq5O+zYRsGPJPY88p3KgUme8rx3I4+CRVht+rqpVMSC0mh4PK8aiAFM4nU8tGAMQYfccPu45ZFDBFYr+ftrVwWCECY3PLEcSYELIDP8tiIOQgZZ7zs56BODwxPqOPxtmQcBjiP1/PMeS0GI3fH8N+RQAoUXrTp66hWEwlGnt/yv2wiBDCG0fPTgzQHHG3A7eSaSw0PVqzl77BeGQc9ltrzxnUoBSh9y/HajDsIF2W56+mjUREKTKPi8blnHgU1jdTy0HwvBSJ0xe/glUQKElux5+yrWRUJQ5vd88FwJAQug8/z1oY2Bhxqvu3mnUYODlKp5e+zYRsGOpPY88p3KgUmecnw3Y4/CBVhtuvqp1UTC0mf4PK9aiAFM4nU8tGBMQYfccLv45dGDRBYrufur1sYB0CX2/PEcicELH/P8tiKOggZZ7vt56BODwxPpuPxtmQdBTiP1/PMei4GI3bH8N+RQQkUXbPq66hWFQlGnt/yv2wiBDCG0PPThDUGHG3A7eSbTA0PVKvl77BeGQc9lNryynYpBSh9y/HajT0IF2S46+mjUREKTKPi8bpoHgU1jdTy0H4wBSJ0xe/glUQKElux5+yrWhYJQ5vd88NxJAQug8/z1oY3Bhtpve3mnkcPDlKp5e+0YhsGOpHY88p5LAUlecnw3Y8/CBVhtuvqp1UTC0mf4PK9aiAFM4nU8tGBMQYfccLv45dGDRBYrufur10XB0CX2/PEcycELH7O8tiKOwgZZrvt56BOEQxPpuPxt2UdBTeP1/PMei4GI3bH79+RQQsUXbTo7KlXFQlGnN/yv24jBDCF0PPThDUGHG3A7eSbTA0PVKvl77BgGgc9lNryynYpBSh7y/HajT0IF2S46+mjUhEKTKLh8bpoHwU1jdTy0H4wBSF0xPDglkUKElux5+yrWhYJQ5rb88NyJQQug87z1oY3Bhtpve3mnkcPDlKp5e+0YhsGOpHY8sp5LAUleMnw3Y9ACBVhtuvqp1UTC0mf4PK9bCEFMojT89GBMgcfccLv45dGDRBYrufur10XB0CX2/PEcycELH7O8tiKOwgZZrvt56BOEQxPpuPxt2UdBTeO1/PMei8GI3bH79+RQQsUXbTo7KlXFQlGnN/yv24jBDCF0PPThDUGHG3A7eSbTA0PVKvl77BgGgc9lNryynYpBSh7y/HajT0IF2S46+mjUhEKTKLh8bpoHwU1");
           await beep.play();
         } catch (err) {
-          console.error("ビープ音再生エラー:", err);
+          if (process.env.NODE_ENV === 'development') {
+            console.error("ビープ音再生エラー:", err);
+          }
         }
 
         onDetected(barcode);
@@ -36,7 +38,6 @@ export default function BarcodeScanner({ onDetected }: BarcodeScannerProps) {
   }, [isScanning, onDetected]);
 
   const handleScannerError = useCallback((error: unknown) => {
-    console.error("スキャナーエラー:", error);
     let message = "スキャンエラーが発生しました。";
     if (error instanceof Error) {
       message = error.message;

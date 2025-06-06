@@ -40,16 +40,8 @@ export default function TransactionPage() {
   
   useEffect(() => {
     const path = window.location.pathname;
-    console.log('トランザクションページ初期化:', {
-      isLoggedIn,
-      employeeCode,
-      path
-    });
-    
     if (!isLoggedIn && !employeeCode) {
-      console.log('ゲストユーザーとして取引を開始します');
-    } else {
-      console.log('ログインユーザーとして取引を開始します:', employeeCode);
+      // ゲストユーザーとして取引を開始
     }
   }, [isLoggedIn, employeeCode]);
 
@@ -144,7 +136,7 @@ export default function TransactionPage() {
         }
       };
 
-      const response = await axios.post(
+      await axios.post(
         `${API_ENDPOINT}/transactions/`,
         transactionData,
         config
@@ -163,7 +155,6 @@ export default function TransactionPage() {
   const handleCompletionOk = () => {
     setShowCompletionPopup(false);
     if (isLoggedIn) {
-      console.log('購入完了：ログアウトしてゲストモードに戻ります');
       setIsLoggedIn(false);
       setEmployeeCode('');
     }
@@ -175,8 +166,6 @@ export default function TransactionPage() {
     setCartItems([]);
     setCompletedAmount(0);
     
-    // ルートページにリダイレクト
-    console.log('ホームページに戻ります');
     router.push('/');
   };
 
