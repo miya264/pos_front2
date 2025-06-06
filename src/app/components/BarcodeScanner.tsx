@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import Quagga from 'quagga';
+import { Box, ProcessResult, QuaggaResult } from 'quagga';
 
 interface BarcodeScannerProps {
   onDetected: (code: string) => void;
@@ -39,7 +40,7 @@ export default function BarcodeScanner({ onDetected }: BarcodeScannerProps) {
           ]
         },
         locate: true
-      }, (err) => {
+      }, (err: Error | null) => {
         if (err) {
           console.error("Quagga初期化エラー:", err);
           return;
@@ -49,14 +50,14 @@ export default function BarcodeScanner({ onDetected }: BarcodeScannerProps) {
       });
 
       // デバッグ情報の表示
-      Quagga.onProcessed((result) => {
+      Quagga.onProcessed((result: ProcessResult) => {
         const drawingCtx = Quagga.canvas.ctx.overlay;
         const drawingCanvas = Quagga.canvas.dom.overlay;
 
         if (result) {
           if (result.boxes) {
             drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
-            result.boxes.filter((box) => box !== result.box).forEach((box) => {
+            result.boxes.filter((box: Box) => box !== result.box).forEach((box: Box) => {
               Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, drawingCtx, { color: "green", lineWidth: 2 });
             });
           }
@@ -71,7 +72,7 @@ export default function BarcodeScanner({ onDetected }: BarcodeScannerProps) {
         }
       });
 
-      Quagga.onDetected((result) => {
+      Quagga.onDetected((result: QuaggaResult) => {
         console.log("バーコード検出:", result.codeResult.code);
         if (result.codeResult.code) {
           onDetected(result.codeResult.code);
