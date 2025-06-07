@@ -6,6 +6,7 @@ import axios from "axios";
 import BarcodeScanner from "../components/BarcodeScanner";
 import { TrashIcon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useEmployee } from "../contexts/EmployeeContext";
+import Header from "../components/Header";
 
 // APIエンドポイントの設定
 const API_ENDPOINT = process.env.NEXT_PUBLIC_API_ENDPOINT;
@@ -203,27 +204,10 @@ export default function TransactionPage() {
     router.push('/');
   };
 
-  const renderHeader = () => (
-    <div className="w-full bg-white shadow-md p-4 flex justify-between items-center">
-      <div className="flex items-center space-x-4">
-        <h1 className="text-xl font-bold">POS System</h1>
-        <span className="text-gray-600">
-          店員: {employeeCode}
-        </span>
-      </div>
-      <button
-        onClick={handleLogout}
-        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-      >
-        ログアウト
-      </button>
-    </div>
-  );
-
   return (
-    <div className="flex flex-col w-full h-full relative">
-      {isLoggedIn && renderHeader()}
-      <div className={`flex flex-col lg:flex-row w-full h-full relative ${isLoggedIn ? 'h-[calc(100vh-64px)]' : 'h-screen'}`}>
+    <div className="flex flex-col w-full h-screen">
+      <Header />
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         <button
           onClick={toggleCart}
           className="lg:hidden fixed top-4 right-4 z-40 bg-blue-600 text-white p-2 rounded-full shadow-lg"
@@ -237,7 +221,7 @@ export default function TransactionPage() {
           )}
         </button>
 
-        <div className={`w-full lg:w-1/2 ${isLoggedIn ? 'h-[calc(100vh-64px)]' : 'h-screen'} p-2 lg:p-4 flex flex-col`}>
+        <div className="w-full lg:w-1/2 h-[calc(100vh-56px)] p-2 lg:p-4 flex flex-col">
           <div className="flex-1 flex flex-col">
             <div className="w-full rounded-md bg-gray-100 p-2 flex flex-col flex-[3]">
               <div className="flex flex-col items-center bg-white border border-gray-300 rounded-md m-1 h-full">
@@ -358,7 +342,7 @@ export default function TransactionPage() {
           </div>
         </div>
 
-        <div className={`hidden lg:flex w-1/2 ${isLoggedIn ? 'h-[calc(100vh-64px)]' : 'h-screen'} p-2 lg:p-4`}>
+        <div className="hidden lg:flex w-1/2 h-[calc(100vh-56px)] p-2 lg:p-4">
           <div className="w-full h-full rounded-md bg-white flex flex-col">
             <h1 className="text-2xl font-bold p-4 border-b">購入リスト</h1>
             <div className="flex-1 overflow-auto p-4">

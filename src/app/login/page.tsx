@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useEmployee } from '../contexts/EmployeeContext';
 import axios from 'axios';
+import Header from '../components/Header';
 
 export default function LoginPage() {
   const [employeeCode, setEmployeeCode] = useState('');
@@ -38,23 +39,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* ヘッダー */}
-      <div className="p-4 relative z-10 flex justify-between items-center">
-        <button 
-          onClick={() => router.push('/')}
-          className="bg-blue-600 text-white text-base sm:text-lg md:text-xl px-4 py-2 rounded-xl shadow-md hover:bg-blue-700 transition-colors"
-        >
-          Pop up Store
-        </button>
-        <button 
-          onClick={() => router.push('/')}
-          className="bg-blue-400 text-white text-base sm:text-lg md:text-xl px-4 py-2 rounded-xl shadow-md hover:bg-blue-500 transition-colors"
-        >
-          戻る
-        </button>
-      </div>
-
-      {/* メインコンテンツ */}
+      <Header />
       <div className="absolute inset-0 flex justify-center items-center">
         <div className="w-full max-w-md px-4 mt-16">
           <h1 className="text-2xl sm:text-3xl md:text-4xl text-center mb-8">店員番号</h1>
